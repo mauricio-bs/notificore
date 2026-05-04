@@ -25,12 +25,12 @@ export class SendNotification {
     const notification = notificationResult.getValue();
 
     try {
-      this.notificationRepository.save(notification);
+      await this.notificationRepository.save(notification);
 
-      this.messageProvider.send(notification);
+      await this.messageProvider.send(notification);
       notification.markAsSent();
 
-      this.notificationRepository.save(notification);
+      await this.notificationRepository.save(notification);
 
       return Result.ok<Notification>(notification);
     } catch (error) {

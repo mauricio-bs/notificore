@@ -20,7 +20,7 @@ export class MailhogMailProvider implements MessageProvider {
     try {
       await this.transporter.sendMail({
         from: '"NotifiCore System" <no-reply@notificore.local>',
-        to: `user-${notification.userId}@example.com`,
+        to: notification.targetContact,
         subject: `New ${notification.type} Notification`,
         text: notification.content,
       });

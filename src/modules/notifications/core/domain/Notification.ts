@@ -4,6 +4,7 @@ import { randomUUID } from 'crypto';
 
 export interface NotificationProps {
   userId: string;
+  targetContact?: string;
   content: string;
   type: 'EMAIL' | 'SMS';
   createdAt?: Date;
@@ -30,6 +31,10 @@ export class Notification {
     return this.props.userId;
   }
 
+  get targetContact(): string | undefined {
+    return this.props.targetContact;
+  }
+
   get content(): string {
     return this.props.content;
   }
@@ -39,7 +44,7 @@ export class Notification {
   }
 
   get createdAt(): Date {
-    return this.props.createdAt!;
+    return this.props.createdAt;
   }
 
   get sentAt(): Date | undefined {
@@ -54,7 +59,6 @@ export class Notification {
     props: NotificationProps,
     id?: string,
   ): Result<Notification> {
-    // Business Rule: No-Disturb between 22:00 and 06:00
     const currentHour = new Date().getHours();
     if (currentHour >= 22 || currentHour < 6) {
       return Result.fail<Notification>(new NoDisturbError().message);

@@ -1,0 +1,56 @@
+services:
+  notificore-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: notificore_api
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+      - REDIS_HOST=notificore-redis
+      - REDIS_PORT=6379
+      - MAILHOG_HOST=notificore-mailhog
+      - MAILHOG_PORT=1025
+      - TWILIO_ACCOUNT_SID=AC_dummy_account_sid_for_local_dev
+      - TWILIO_AUTH_TOKEN=dummy_auth_token_for_local_dev
+      - TWILIO_BASE_URL=http://notificore-twilio:8080
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    develop:
+      watch:
+        - path: .
+          action: sync+restart
+          target: /app
+    depends_on:
+      - notificore-redis
+      - notificore-mailhog
+      - notificore-twilio
+    command: pnpm run start:debug
+
+  notificore-redis:
+    image: redis:7-alpine
+    container_name: notificore_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  notificore-mailhog:
+    image: mailhog/mailhog:latest
+    container_name: notificore_mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  notificore-twilio:
+    image: mccutchen/go-httpbin:latest
+    container_name: notificore_twilio
+    ports:
+      - "8080:8080"
+
+volumes:
+  redis_data:

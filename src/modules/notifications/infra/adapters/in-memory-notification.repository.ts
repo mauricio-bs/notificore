@@ -7,7 +7,7 @@ import { NotificationSaveError } from '../../core/domain/errors/notification-sav
 export class InMemoryNotificationRepository implements NotificationRepository {
   private readonly notifications: Map<string, Notification> = new Map();
 
-  save(notification: Notification): void {
+  async save(notification: Notification): Promise<void> {
     try {
       this.notifications.set(notification.id, notification);
     } catch (error) {
@@ -15,7 +15,7 @@ export class InMemoryNotificationRepository implements NotificationRepository {
     }
   }
 
-  findById(id: string): Notification | null {
+  async findById(id: string): Promise<Notification | null> {
     const notification = this.notifications.get(id);
     return notification || null;
   }

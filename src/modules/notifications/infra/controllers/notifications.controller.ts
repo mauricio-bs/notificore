@@ -6,12 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { SendNotification } from '../../core/application/use-cases/SendNotification';
-
-export class SendNotificationDto {
-  userId: string;
-  content: string;
-  type: 'EMAIL' | 'SMS';
-}
+import { SendNotificationDto } from './dtos/send-notification.dto';
 
 @Controller('notifications')
 export class NotificationsController {
@@ -21,6 +16,7 @@ export class NotificationsController {
   async send(@Body() body: SendNotificationDto) {
     const result = await this.sendNotification.execute({
       userId: body.userId,
+      targetContact: body.targetContact,
       content: body.content,
       type: body.type,
     });

@@ -28,7 +28,7 @@ export class Result<T> {
         "Can't get the value of an error result. Use 'error' instead.",
       );
     }
-    return this._value as T;
+    return this._value;
   }
 
   public static ok<U>(value?: U): Result<U> {

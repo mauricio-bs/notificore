@@ -4,6 +4,7 @@ import {
   Body,
   HttpException,
   HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { SendNotification } from '../../core/application/use-cases/SendNotification';
 import { SendNotificationDto } from './dtos/send-notification.dto';
@@ -13,6 +14,7 @@ export class NotificationsController {
   constructor(private readonly sendNotification: SendNotification) {}
 
   @Post()
+  @HttpCode(HttpStatus.ACCEPTED)
   async send(@Body() body: SendNotificationDto) {
     const result = await this.sendNotification.execute({
       userId: body.userId,

@@ -19,7 +19,7 @@ export class SendNotificationDto {
   @IsEmail()
   @ValidateIf((o) => o.type === 'SMS')
   @IsPhoneNumber()
-  targetContact: string;
+  targetContact: string; // type=EMAIL → must be email; type=SMS → must be phone
 
   @IsString()
   @IsNotEmpty()
